@@ -14,9 +14,12 @@ public class Player : MonoBehaviour
     public bool isMenuPaperOpenReady;
     public CinemachineVirtualCamera mainCam;
 
+    Animator anim;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>(); // Rigidbody2D 컴포넌트를 참조
+        anim = GetComponent<Animator>();
     }
     void Update()
     {
@@ -33,8 +36,6 @@ public class Player : MonoBehaviour
                 kitchenMenuReadyUI.gameObject.SetActive(false);
                 kitchenMenuUI.gameObject.SetActive(true);
             }
-            
-
         }
 
 
@@ -48,7 +49,12 @@ public class Player : MonoBehaviour
         // 플레이어가 좌우로 이동하는 방향을 바라보도록 설정
         if (horizontalInput != 0f)
         {
+            anim.SetBool("isWalk_Left", true);
             transform.localScale = new Vector3(Mathf.Sign(horizontalInput), 1f, 1f);
+        }
+        else
+        {
+            anim.SetBool("isWalk_Left", false);
         }
         
 
