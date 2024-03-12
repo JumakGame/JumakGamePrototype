@@ -43,7 +43,7 @@ public class Store_Pro2 : MonoBehaviour
         imageTextMapping.Add("ItemImage_Fish", buyFish_txt);
         imageTextMapping.Add("ItemImage_Source", buySoysource_txt);
         imageTextMapping.Add("ItemImage_Mak", buyOriginalMak_txt);
-        
+
         // 추가적인 이미지와 TextMeshProUGUI 매핑
 
         // 초기화 코드
@@ -110,7 +110,7 @@ public class Store_Pro2 : MonoBehaviour
             }
         }
         OnImageAdded(); // 이미지 추가가 완료되었음을 알림
-        
+
     }
 
     public void OnImageAdded() // 이미지 추가가 완료되면 호출하는 메서드
@@ -190,12 +190,16 @@ public class Store_Pro2 : MonoBehaviour
     public void CloseStoreUI()
     {
         storeUI.SetActive(false);
-
-        if (lastClickedImage != null)
+        if (previousActiveText != null)
         {
-            lastClickedImage.SetActive(false);
-            lastClickedImage = null;
+            previousActiveText.gameObject.SetActive(false);
         }
+
+        // if (lastClickedImage != null)
+        // {
+        //     lastClickedImage.SetActive(false);
+        //     lastClickedImage = null;
+        // }
 
         buyFirst_txt.gameObject.SetActive(true);
     }

@@ -3,21 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 using Cinemachine;
+using UnityEngine.SceneManagement;
 public class Player : MonoBehaviour
 {
     public float moveSpeed = 5f; // 플레이어의 이동 속도
     private Rigidbody2D rb; // Rigidbody2D 컴포넌트에 대한 참조
     public Canvas interactionUI;
     public Canvas kitchenMenuReadyUI;
+    public Canvas GoVillageUI;
     public Canvas kitchenMenuUI;
     public Canvas staffInfoUI;
     public Canvas staffChearUpUI;
+    public Canvas staffChearUpUIReady;
+    public Canvas GoJumakUI;
     public bool isMenuPaperOpen;
+    public bool isGoVillageUI;
+    public bool isGoJumak;
     public bool isStaffPaperOpenReady;
     public bool isMenuPaperOpenReady;
     public bool isStaff;
     public bool isChk;
-    public CinemachineVirtualCamera mainCam;
+    public Canvas NoNextUI;
 
     Animator anim;
 
@@ -28,12 +34,20 @@ public class Player : MonoBehaviour
     }
     void Update()
     {
-       
-        if (isMenuPaperOpenReady || isStaffPaperOpenReady || isStaff)
+
+        if (isMenuPaperOpenReady || isStaffPaperOpenReady || isStaff || isGoVillageUI || isGoJumak)
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
                 isMenuPaperOpen = true;
+                if (isGoVillageUI)
+                {
+                    SceneManager.LoadScene("SquareScene");
+                }
+                if (isGoJumak)
+                {
+                    SceneManager.LoadScene("JumakScene");
+                }
 
                 if (kitchenMenuReadyUI.gameObject.activeSelf)
                 {
@@ -48,7 +62,7 @@ public class Player : MonoBehaviour
                     staffInfoUI.gameObject.SetActive(true);
 
                 }
-                if(isStaff && !staffChearUpUI.gameObject.activeSelf)
+                if (isStaff && !staffChearUpUI.gameObject.activeSelf)
                 {
                     Time.timeScale = 0;
                     staffChearUpUI.gameObject.SetActive(true);
@@ -57,7 +71,7 @@ public class Player : MonoBehaviour
                 //isStaff = false;
                 isMenuPaperOpenReady = false;
                 isStaffPaperOpenReady = false;
-                isMenuPaperOpen = false;
+                //isMenuPaperOpen = false;
             }
         }
 
@@ -65,7 +79,7 @@ public class Player : MonoBehaviour
     }
     void FixedUpdate()
     {
-         if (!isMenuPaperOpen)
+        if (!isMenuPaperOpen)
         {
             Move();
         }
@@ -91,7 +105,7 @@ public class Player : MonoBehaviour
     }
     void OnTriggerEnter2D(Collider2D other)
     {
-       
+
         if (other.CompareTag("MenuPaper") && !isMenuPaperOpen)
         {
 
@@ -103,34 +117,68 @@ public class Player : MonoBehaviour
             kitchenMenuReadyUI.gameObject.SetActive(true);
             isStaffPaperOpenReady = true;
         }
-        if (other.CompareTag("Staff") && !isStaff &&!isChk)
+        if (other.CompareTag("Staff") && !isStaff && !isChk)
         {
-            interactionUI.gameObject.SetActive(true);
+            staffChearUpUIReady.gameObject.SetActive(true);
             isStaff = true;
+        }
+        if (other.CompareTag("GoVillage") && !isGoVillageUI)
+        {
+
+            GoVillageUI.gameObject.SetActive(true);
+            isGoVillageUI = true;
+        }
+        if (other.CompareTag("GoJumak") && !isGoJumak)
+        {
+
+            GoJumakUI.gameObject.SetActive(true);
+            isGoJumak = true;
+        }
+        if(other.name == "NextZone")
+        {
+             NoNextUI.gameObject.SetActive(true);
         }
 
     }
+  
+
     void OnTriggerExit2D(Collider2D other)
     {
-        
-        if (other.CompareTag("MenuPaper") && isMenuPaperOpen)
+
+        if (other.CompareTag("MenuPaper") && isMenuPaperOpenReady)
         {
 
             kitchenMenuReadyUI.gameObject.SetActive(false);
             isMenuPaperOpenReady = false;
 
         }
-         if (other.CompareTag("StaffInfo") && isStaffPaperOpenReady)
+        if (other.CompareTag("StaffInfo") && isStaffPaperOpenReady)
         {
 
             staffInfoUI.gameObject.SetActive(false);
             isStaffPaperOpenReady = false;
 
         }
-        if (other.CompareTag("Staff")&& isStaff)
+        if (other.CompareTag("Staff") && isStaff)
         {
             interactionUI.gameObject.SetActive(false);
             isStaff = false;
+        }
+        if (other.CompareTag("GoVillage") && isGoVillageUI)
+        {
+
+            GoVillageUI.gameObject.SetActive(false);
+            isGoVillageUI = false;
+        }
+        if (other.CompareTag("GoJumak") && isGoJumak)
+        {
+
+            GoJumakUI.gameObject.SetActive(false);
+            isGoJumak = false;
+        }
+        if(other.name == "NextZone")
+        {
+             NoNextUI.gameObject.SetActive(false);
         }
     }
 

@@ -14,8 +14,8 @@ public class CanmakeFood_Pro : MonoBehaviour
     public TextMeshProUGUI canMakeAllMakCnt;
     public TextMeshProUGUI canMakeAllMeatCnt;
 
-    Player player;
-    KitchenMenuInteraction kitchenMenu;
+    public Player player;
+    public KitchenMenuInteraction kitchenMenu;
 
 
     void Start()
@@ -31,15 +31,18 @@ public class CanmakeFood_Pro : MonoBehaviour
     {
         if (player.isMenuPaperOpen)
         {
+            Debug.Log("열림");
             if (kitchenMenu.RightPenel_1)
             {
                 canMakeStrawberryMakCnt.text = FoodCnt_Pro.strawberryMak_minBottles.ToString();
                 canMakeAppleMakCnt.text = FoodCnt_Pro.appleMak_minBottles.ToString();
+                Debug.Log(canMakeStrawberryMakCnt);
             }
             if (kitchenMenu.RightPenel_2)
             {
                 canMakeProkCnt.text = FoodCnt_Pro.pork_minFood.ToString();
                 canMakeFishCnt.text = FoodCnt_Pro.fish_minFood.ToString();
+
             }
             UpdateCanMakeAllMakCnt();
             UpdateCanMakeAllMeatCnt();
@@ -73,6 +76,7 @@ public class CanmakeFood_Pro : MonoBehaviour
         {
             canMakeAllMakCnt.text = "0";
         }
+        Debug.Log(canMakeAllMakCnt);
     }
 
     void UpdateCanMakeAllMeatCnt()
