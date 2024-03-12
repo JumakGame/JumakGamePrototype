@@ -10,8 +10,13 @@ public class Player : MonoBehaviour
     public Canvas interactionUI;
     public Canvas kitchenMenuReadyUI;
     public Canvas kitchenMenuUI;
+    public Canvas staffInfoUI;
+    public Canvas staffChearUpUI;
     public bool isMenuPaperOpen;
+    public bool isStaffPaperOpenReady;
     public bool isMenuPaperOpenReady;
+    public bool isStaff;
+    public bool isChk;
     public CinemachineVirtualCamera mainCam;
 
     Animator anim;
@@ -23,22 +28,47 @@ public class Player : MonoBehaviour
     }
     void Update()
     {
-        if (!isMenuPaperOpen)
+       
+        if (isMenuPaperOpenReady || isStaffPaperOpenReady || isStaff)
         {
-            Move();
-        }
-        if(isMenuPaperOpenReady)
-        {
-            if(Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 isMenuPaperOpen = true;
+
+                if (kitchenMenuReadyUI.gameObject.activeSelf)
+                {
+                    kitchenMenuReadyUI.gameObject.SetActive(false);
+                }
+                if (isMenuPaperOpenReady && !kitchenMenuUI.gameObject.activeSelf)
+                {
+                    kitchenMenuUI.gameObject.SetActive(true);
+                }
+                if (isStaffPaperOpenReady && !staffInfoUI.gameObject.activeSelf)
+                {
+                    staffInfoUI.gameObject.SetActive(true);
+
+                }
+                if(isStaff && !staffChearUpUI.gameObject.activeSelf)
+                {
+                    Time.timeScale = 0;
+                    staffChearUpUI.gameObject.SetActive(true);
+                    isChk = true;
+                }
+                //isStaff = false;
                 isMenuPaperOpenReady = false;
-                kitchenMenuReadyUI.gameObject.SetActive(false);
-                kitchenMenuUI.gameObject.SetActive(true);
+                isStaffPaperOpenReady = false;
+                isMenuPaperOpen = false;
             }
         }
 
 
+    }
+    void FixedUpdate()
+    {
+         if (!isMenuPaperOpen)
+        {
+            Move();
+        }
     }
     void Move()
     {
@@ -56,38 +86,51 @@ public class Player : MonoBehaviour
         {
             anim.SetBool("isWalk_Left", false);
         }
-        
+
 
     }
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Object"))
-        {
-            interactionUI.gameObject.SetActive(true);
-
-        }
-        if (other.CompareTag("MenuPaper")&& !isMenuPaperOpen)
+       
+        if (other.CompareTag("MenuPaper") && !isMenuPaperOpen)
         {
 
             kitchenMenuReadyUI.gameObject.SetActive(true);
             isMenuPaperOpenReady = true;
-
+        }
+        if (other.CompareTag("StaffInfo") && !isStaffPaperOpenReady)
+        {
+            kitchenMenuReadyUI.gameObject.SetActive(true);
+            isStaffPaperOpenReady = true;
+        }
+        if (other.CompareTag("Staff") && !isStaff &&!isChk)
+        {
+            interactionUI.gameObject.SetActive(true);
+            isStaff = true;
         }
 
     }
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag("Object"))
-        {
-            interactionUI.gameObject.SetActive(false);
-
-        }
-         if (other.CompareTag("MenuPaper")&& !isMenuPaperOpen)
+        
+        if (other.CompareTag("MenuPaper") && isMenuPaperOpen)
         {
 
             kitchenMenuReadyUI.gameObject.SetActive(false);
             isMenuPaperOpenReady = false;
 
+        }
+         if (other.CompareTag("StaffInfo") && isStaffPaperOpenReady)
+        {
+
+            staffInfoUI.gameObject.SetActive(false);
+            isStaffPaperOpenReady = false;
+
+        }
+        if (other.CompareTag("Staff")&& isStaff)
+        {
+            interactionUI.gameObject.SetActive(false);
+            isStaff = false;
         }
     }
 
