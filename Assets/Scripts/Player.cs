@@ -16,6 +16,9 @@ public class Player : MonoBehaviour
     public Canvas staffChearUpUI;
     public Canvas staffChearUpUIReady;
     public Canvas GoJumakUI;
+    public Canvas CEOTalkUI;
+    public GameObject marketUI;
+
     public bool isMenuPaperOpen;
     public bool isGoVillageUI;
     public bool isGoJumak;
@@ -23,6 +26,7 @@ public class Player : MonoBehaviour
     public bool isMenuPaperOpenReady;
     public bool isStaff;
     public bool isChk;
+    public bool isCEOTalk;
     public Canvas NoNextUI;
 
     Animator anim;
@@ -35,7 +39,7 @@ public class Player : MonoBehaviour
     void Update()
     {
 
-        if (isMenuPaperOpenReady || isStaffPaperOpenReady || isStaff || isGoVillageUI || isGoJumak)
+        if (isMenuPaperOpenReady || isStaffPaperOpenReady || isStaff || isGoVillageUI || isGoJumak || isCEOTalk)
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
@@ -49,10 +53,7 @@ public class Player : MonoBehaviour
                     SceneManager.LoadScene("JumakScene");
                 }
 
-                if (kitchenMenuReadyUI.gameObject.activeSelf)
-                {
-                    kitchenMenuReadyUI.gameObject.SetActive(false);
-                }
+                
                 if (isMenuPaperOpenReady && !kitchenMenuUI.gameObject.activeSelf)
                 {
                     kitchenMenuUI.gameObject.SetActive(true);
@@ -67,6 +68,11 @@ public class Player : MonoBehaviour
                     Time.timeScale = 0;
                     staffChearUpUI.gameObject.SetActive(true);
                     isChk = true;
+                }
+                if(isCEOTalk && !marketUI.gameObject.activeSelf)
+                {
+                    marketUI.gameObject.SetActive(true);
+                    CEOTalkUI.gameObject.SetActive(false);
                 }
                 //isStaff = false;
                 isMenuPaperOpenReady = false;
@@ -134,9 +140,15 @@ public class Player : MonoBehaviour
             GoJumakUI.gameObject.SetActive(true);
             isGoJumak = true;
         }
-        if(other.name == "NextZone")
+        if(other.CompareTag("BackyardZone"))
         {
              NoNextUI.gameObject.SetActive(true);
+        }
+        if(other.CompareTag("CEO")&& !isCEOTalk)
+        {
+            isCEOTalk = true;
+            CEOTalkUI.gameObject.SetActive(true);
+
         }
 
     }
@@ -176,9 +188,15 @@ public class Player : MonoBehaviour
             GoJumakUI.gameObject.SetActive(false);
             isGoJumak = false;
         }
-        if(other.name == "NextZone")
+        if(other.CompareTag("BackyardZone"))
         {
              NoNextUI.gameObject.SetActive(false);
+        }
+         if(other.CompareTag("CEO")&& isCEOTalk)
+        {
+            isCEOTalk = false;
+            CEOTalkUI.gameObject.SetActive(false);
+
         }
     }
 

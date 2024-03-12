@@ -33,9 +33,11 @@ public class Store_Pro2 : MonoBehaviour
     public TextMeshProUGUI buyFish_txt;
     public TextMeshProUGUI buySoysource_txt;
     public TextMeshProUGUI buyOriginalMak_txt;
+    public Player player;
 
     void Start()
     {
+        player = player.GetComponent<Player>();
         // 딕셔너리에 이미지 이름과 TextMeshProUGUI를 매핑합니다.
         imageTextMapping.Add("ItemImage_Strawberry", buyStrawberry_txt);
         imageTextMapping.Add("ItemImage_Apple", buyApple_txt);
@@ -202,6 +204,7 @@ public class Store_Pro2 : MonoBehaviour
         // }
 
         buyFirst_txt.gameObject.SetActive(true);
+        player.isMenuPaperOpen = false;
     }
 
     public void OpenStoreUI()
